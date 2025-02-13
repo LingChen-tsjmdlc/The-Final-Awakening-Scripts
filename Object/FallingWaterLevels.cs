@@ -35,7 +35,8 @@ public class FallingWaterLevels : MonoBehaviour
                 openSprite.SetActive(!openSprite.activeSelf);
 
                 FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().switchPole);
-                FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().fallingWaterLevels);
+                FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().fallingWaterLevels
+                    );
 
                 FallingWater();
             }

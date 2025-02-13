@@ -8,7 +8,8 @@ public class StartPanel : MonoBehaviour
     private GameObject startPanel;
 
     [SerializeField] private GameObject startGameButton;
-    [SerializeField] private GameObject settingButton;
+    [SerializeField] private GameObject settingButton; 
+    [SerializeField] private GameObject aboutButton;
     [SerializeField] private GameObject ExitGameButton;
 
     private void Start()
@@ -38,6 +39,12 @@ public class StartPanel : MonoBehaviour
     public void OpenGameSetting()
     {
         UIManager.GetInstance().FindPanel("SettingUI");
+        UIAudioManager.GetInstance().PlaySound(UIAudioManager.GetInstance().startUIButtonDownAudio);
+    }
+
+    public void OpenAbout()
+    {
+        UIManager.GetInstance().FindPanel("AboutUI");
         UIAudioManager.GetInstance().PlaySound(UIAudioManager.GetInstance().startUIButtonDownAudio);
     }
 
