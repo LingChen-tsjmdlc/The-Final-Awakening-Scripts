@@ -47,6 +47,14 @@ public class OpitionsPanel : MonoBehaviour
         UpdateVolumeUI(FxVolume, FxVolumeSlider, FxVolumeText);
     }
 
+    private void Update()
+    {
+        if (InputManager.GetInstance().BackButton)
+        {
+            BackButtonDown();
+        }
+    }
+
     /// <summary>
     /// 更新 UI 上的音量显示
     /// </summary>

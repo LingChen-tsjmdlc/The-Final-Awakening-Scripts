@@ -17,29 +17,38 @@ public class FallingWaterLevels : MonoBehaviour
     // 添加成员变量来控制移动速度
     [SerializeField] private float moveSpeed = 1f;
 
+    private bool isFallDownWater;
+
     private void Start()
     {
         closeSprite.SetActive(true);
         openSprite.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (!isFallDownWater)
+        {
+            isFallDownWater = InputManager.GetInstance().ObjectInteraction;
+            Debug.Log("isFallDownWater: " + isFallDownWater);
+        }
+    }
+
     // TODO: 有bug；按键不太灵敏
     private void OnTriggerStay2D(Collider2D collision)
     {
 
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && isFallDownWater)
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                closeSprite.SetActive(!closeSprite.activeSelf);
-                openSprite.SetActive(!openSprite.activeSelf);
+            isFallDownWater = false;
 
-                FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().switchPole);
-                FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().fallingWaterLevels
-                    );
+            closeSprite.SetActive(!closeSprite.activeSelf);
+            openSprite.SetActive(!openSprite.activeSelf);
 
-                FallingWater();
-            }
+            FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().switchPole);
+            FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().fallingWaterLevels);
+
+            FallingWater();
         }
     }
 

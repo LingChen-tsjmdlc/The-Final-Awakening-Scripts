@@ -44,7 +44,7 @@ public class BoolCreat : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && isPlayerInit)
+        if (InputManager.GetInstance().ObjectInteraction && isPlayerInit)
         {
             Throw();
         }

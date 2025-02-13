@@ -39,7 +39,7 @@ public class PlatformMove : MonoBehaviour
         }
 
         // 按下 'R' 键时禁用碰撞
-        if (Input.GetKeyDown(KeyCode.R))
+        if (InputManager.GetInstance().RestartGame)
         {
             disableCollision = true;
             disableCollisionTimer = 1f; // 设置禁用时间为 1 秒

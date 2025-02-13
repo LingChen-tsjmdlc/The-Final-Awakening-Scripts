@@ -29,6 +29,11 @@ public class MessagePanel : MonoBehaviour
     private void Update()
     {
         PlayrtMovement.instance.StopMovementAndJumping();
+
+        if (InputManager.GetInstance().BackButton)
+        {
+            ClosePanel();
+        }
     }
 
     IEnumerator RevealDescription()

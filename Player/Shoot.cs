@@ -19,6 +19,9 @@ public class Shoot : MonoBehaviour
     private int redPortalCloneCount = 0;
     private int bluePortalCloneCount = 0;
 
+    private bool useMouseL;
+    private bool useMouseR;
+
     // 添加一个字典来存储协程和它们关联的GameObject
     private Dictionary<GameObject, Coroutine> runningCoroutines = new Dictionary<GameObject, Coroutine>();
 
@@ -40,19 +43,12 @@ public class Shoot : MonoBehaviour
 
     private void Update()
     {
-        // 切换射击颜色
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    currentPrefab = redPortalPrefab;
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    currentPrefab = bluePortalPrefab;
-        //}
+        useMouseL = Input.GetMouseButtonDown(0);
+        useMouseR = Input.GetMouseButtonDown(1);
 
         Transform isHasGun = gunPosition.transform.Find("传送枪");
         // 射击
-        if (Input.GetMouseButtonDown(0))
+        if (InputManager.GetInstance().ShootLeftBlue)
         {
             if (isHasGun != null)
             {
@@ -63,9 +59,11 @@ public class Shoot : MonoBehaviour
             else
             {
                 Debug.LogWarning("还没有捡到枪!");
+                useMouseL = false;
+                useMouseR = false;
             }
         }
-        if (Input.GetMouseButtonDown(1))
+        if (InputManager.GetInstance().ShootRightRed)
         {
             if (isHasGun != null)
             {
@@ -76,6 +74,8 @@ public class Shoot : MonoBehaviour
             else
             {
                 Debug.LogWarning("还没有捡到枪!");
+                useMouseL = false;
+                useMouseR = false;
             }
         }
     }
@@ -88,7 +88,25 @@ public class Shoot : MonoBehaviour
         Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 playerPosition = player.transform.position;
         // 计算射击方向
-        Vector2 shootDirection = (mousePosition - playerPosition).normalized;
+        Vector2 shootDirection = (mousePosition - playerPosition).normalized;   //鼠标的方向
+        Vector2 rightStickAngle = InputManager.GetInstance().ShootAngle;        //手柄的方向
+
+        // 判断是否使用手柄方向
+        if (InputManager.GetInstance().IsUsingController && !useMouseL && !useMouseR) //如果使用手柄,且没有点击过鼠标
+        {
+            if (InputManager.GetInstance().ShootAngle == new Vector2 (0,0)) //如果使用手柄但是手柄没动，则使用默认值
+            {
+                shootDirection = PlayrtMovement.instance.gameObject.transform.forward;
+            }
+            else
+            {
+                shootDirection = rightStickAngle.normalized;
+            }
+        }
+
+        useMouseL = false;
+        useMouseR = false;
+
         // 获取除了"Default"和"Player"层之外的所有层的LayerMask
         LayerMask layerMask = ~(LayerMask.GetMask("Default", "Player"));
         RaycastHit2D hit = Physics2D.Raycast(playerPosition, shootDirection, Mathf.Infinity, layerMask);

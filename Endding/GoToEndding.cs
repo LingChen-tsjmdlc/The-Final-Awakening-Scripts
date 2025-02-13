@@ -9,20 +9,17 @@ public class GoToEndding : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D obj)
     {
-        if (obj.CompareTag("Player"))
+        if (obj.CompareTag("Player") && InputManager.GetInstance().TextInteractionAction)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            ScenesManager.GetInstance().TransitionToScene(nextPartName, 0.4f, 0.6f, () =>
             {
-                ScenesManager.GetInstance().TransitionToScene(nextPartName, 0.4f, 0.6f, () =>
+                FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().openMschine);
+                ScenesManager.GetInstance().EnableColliders();
+                if (SceneManager.GetActiveScene().name == "UIScenes")
                 {
-                    FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().openMschine);
-                    ScenesManager.GetInstance().EnableColliders();
-                    if (SceneManager.GetActiveScene().name == "UIScenes")
-                    {
-                        UIManager.GetInstance().FindPanel("StartUI");
-                    }
-                });
-            }
+                    UIManager.GetInstance().FindPanel("StartUI");
+                }
+            });
         }
     }
 }

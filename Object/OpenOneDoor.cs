@@ -9,15 +9,27 @@ public class OpenOneDoor : MonoBehaviour
 
     [SerializeField] private Animator door;
 
-    private bool isOpen;
+    private bool isOpenedOnce;
+    private bool isOneDoorOpen;
+
+    private void Update()
+    {
+        // 只有当isSwitch为false时，才根据输入更新isSwitch的值
+        if (!isOneDoorOpen)
+        {
+            isOneDoorOpen = InputManager.GetInstance().ObjectInteraction;
+            Debug.Log("isOneDoorOpen: " + isOneDoorOpen);
+        }
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !isOpen)
+        if (collision.CompareTag("Player") && !isOpenedOnce)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (isOneDoorOpen)
             {
-                isOpen = true;
+                isOpenedOnce = true;
+                isOneDoorOpen = false;
 
                 closeSprite.SetActive(false);
                 openSprite.SetActive(true);

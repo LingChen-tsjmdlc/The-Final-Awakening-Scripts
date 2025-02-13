@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class ReviewTextOpen : MonoBehaviour
 {
+    /// <summary>
+    /// 阻止再次打开的变量
+    /// </summary>
     public static bool isReviewTextPanelOpen = false;
+
+    private bool isOpen;
+
+
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            if (Input.GetKeyDown(KeyCode.E) && !isReviewTextPanelOpen)
+            if (InputManager.GetInstance().TextInteraction && !isReviewTextPanelOpen)
             {
                 FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().openMschine);
                 UIManager.GetInstance().FindPanel("ReviewText");
                 isReviewTextPanelOpen = true;
+                isOpen = false;
             }
         }
     }

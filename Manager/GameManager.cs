@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name != "UIScenes" && !ispause)
+        if(InputManager.GetInstance().Esc && SceneManager.GetActiveScene().name != "UIScenes" && !ispause)
         {
             UIManager.GetInstance().FindPanel("SettingUI");
             Time.timeScale = 0;

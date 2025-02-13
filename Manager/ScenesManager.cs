@@ -41,8 +41,9 @@ public class ScenesManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (InputManager.GetInstance().RestartGame)
         {
+            StopAllCoroutines();
             ReloadNowScenes();
         }
     }

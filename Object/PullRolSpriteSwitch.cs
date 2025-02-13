@@ -14,27 +14,37 @@ public class PullRolSpriteSwitch : MonoBehaviour
     [SerializeField] private GameObject openPosition;
     [SerializeField] private GameObject closePosition;
 
+    private bool isSwitch;
+
     private void Start()
     {
         closeSprite.SetActive(true);
         openSprite.SetActive(false);
     }
 
+    private void Update()
+    {
+        // 只有当isSwitch为false时，才根据输入更新isSwitch的值
+        if (!isSwitch)
+        {
+            isSwitch = InputManager.GetInstance().ObjectInteraction;
+            Debug.Log("isSwitch: " + isSwitch);
+        }
+    }
+
     // TODO: 有bug；按键不太灵敏
     private void OnTriggerStay2D(Collider2D collision)
     {
         
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && isSwitch)
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                closeSprite.SetActive(!closeSprite.activeSelf);
-                openSprite.SetActive(!openSprite.activeSelf);
+            closeSprite.SetActive(!closeSprite.activeSelf);
+            openSprite.SetActive(!openSprite.activeSelf);
 
-                FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().switchPole);
+            FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().switchPole);
 
-                ProtalChange();     
-            }
+            ProtalChange();
+            isSwitch = false;
         }
     }
 

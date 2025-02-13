@@ -32,9 +32,10 @@ public class MachineCollider : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Active Message"))
+        if (!pressEKey)
         {
-            pressEKey = true;
+            pressEKey = InputManager.GetInstance().TextInteraction;
+            Debug.Log("isOneDoorOpen: " + pressEKey);
         }
     }
 
@@ -99,7 +100,11 @@ public class MachineCollider : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            StartCoroutine(FadeOut(tipsImg, canvasGroup, fadeOutTime)); // 开始渐变隐藏
+            // 在这里确保tipsImg是激活的
+            if (tipsImg.activeSelf)
+            {
+                StartCoroutine(FadeOut(tipsImg, canvasGroup, fadeOutTime)); // 开始渐变隐藏
+            }
             pressEKey = false;
         }
     }
@@ -118,9 +123,18 @@ public class MachineCollider : MonoBehaviour
 
     private IEnumerator FadeOut(GameObject obj, CanvasGroup canvasGroup, float duration)
     {
+        if (InputManager.GetInstance().RestartGame)
+        {
+            yield break;
+        }
         float elapsedTime = 0;
         while (elapsedTime < duration)
         {
+            if (!obj.activeSelf)
+            {
+                Debug.LogWarning("淡出协程停止，因为'tipsImg'不再活动。");
+                yield break; // 退出协程
+            }
             canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;

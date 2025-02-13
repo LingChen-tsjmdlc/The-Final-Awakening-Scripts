@@ -33,6 +33,9 @@ public class PlayrtMovement : MonoBehaviour
     [SerializeField] private bool isGrounded;
     public static bool wasGrounded; // 用来跟踪上一帧是否在地面上
 
+    // 在类中添加一个平滑速度系数
+    public float smoothSpeed = 10f;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -58,15 +61,29 @@ public class PlayrtMovement : MonoBehaviour
         Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * checkDistance);
     }
 
-    // 在类中添加一个平滑速度系数
-    public float smoothSpeed = 10f;
     private void Run()
     {
-        float runValue = Input.GetAxis("Horizontal");
+        // 使用ImputManager获取的Move值来控制角色移动
+        Vector2 moveDirection = InputManager.GetInstance().Move;
+        float runValue = moveDirection.x; // 获取水平方向的移动值
+
+        // 限制 runValue
+        if (runValue<0)
+        {
+            runValue = -1;
+        }
+        else if (runValue == 0)
+        {
+            runValue = 0;
+        }
+        else if (runValue > 0)
+        {
+            runValue = 1;
+        }
+
         // 根据输入设置角色的水平速度
         if (runValue != 0)
         {
-            //Debug.Log("runValue有值");
             playerAnimator.SetBool("isWalk", true);
             // 判断是否在地面上
             if (isGrounded)
@@ -80,8 +97,8 @@ public class PlayrtMovement : MonoBehaviour
             else
             {
                 // 使用Rigidbody2D来平滑地移动角色
-                float targetSpeed = runValue * speed;
-                float smoothedSpeed = Mathf.Lerp(rb.velocity.x, targetSpeed, Time.fixedDeltaTime * smoothSpeed);
+                float targetSpeed = (runValue * speed) * 0.8f;
+                float smoothedSpeed = Mathf.Lerp(rb.velocity.x, targetSpeed, Time.deltaTime * smoothSpeed);
                 rb.velocity = new Vector2(smoothedSpeed, rb.velocity.y);
             }
             Flip(runValue);
@@ -116,7 +133,7 @@ public class PlayrtMovement : MonoBehaviour
             playerAnimator.SetBool("jump", false);
         }
         // 触发跳跃动画
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (isGrounded && InputManager.GetInstance().IsJump)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             playerAnimator.SetBool("jump", true);
