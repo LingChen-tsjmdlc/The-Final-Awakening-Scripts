@@ -28,7 +28,7 @@ public class PullRolSpriteSwitch : MonoBehaviour
         if (!isSwitch)
         {
             isSwitch = InputManager.GetInstance().ObjectInteraction;
-            Debug.Log("isSwitch: " + isSwitch);
+            //Debug.Log("isSwitch: " + isSwitch);
         }
     }
 

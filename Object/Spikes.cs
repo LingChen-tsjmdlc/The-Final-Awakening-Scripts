@@ -65,5 +65,6 @@ public class Spikes : MonoBehaviour
 
         // 等待音频播放完成
         yield return new WaitForSeconds(audioSource.clip.length);
+
     }
 }

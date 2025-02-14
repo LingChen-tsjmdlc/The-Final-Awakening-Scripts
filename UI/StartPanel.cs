@@ -24,6 +24,8 @@ public class StartPanel : MonoBehaviour
         }
 
         EventSystem.current.SetSelectedGameObject(menuFisrt);
+        CursorController.GetInstance().playerHanGun = false;
+        CursorController.GetInstance().ResetCursor();
     }
 
     /// <summary>

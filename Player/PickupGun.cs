@@ -14,6 +14,8 @@ public class PickupGun : MonoBehaviour
             transform.position = gunPosition.transform.position;
             transform.Rotate(0, 0, -80, Space.Self);
             transform.localScale = new Vector3(0.8f, 0.8f, 1);
+
+            CursorController.GetInstance().playerHanGun = true;
         }
     }
 }

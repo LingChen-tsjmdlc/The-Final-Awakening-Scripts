@@ -32,9 +32,10 @@ public class PlayrtMovement : MonoBehaviour
     private Animator playerAnimator;
     [SerializeField] private bool isGrounded;
     public static bool wasGrounded; // 用来跟踪上一帧是否在地面上
+    public bool firstTouchdownAfterJumping; //跳跃后第一次触地
 
     // 在类中添加一个平滑速度系数
-    public float smoothSpeed = 10f;
+    public float smoothSpeed = 100f;
 
     private void Start()
     {
@@ -52,6 +53,12 @@ public class PlayrtMovement : MonoBehaviour
     {
         Run();
         Jump();
+
+        if (firstTouchdownAfterJumping && isGrounded)
+        {
+            firstTouchdownAfterJumping = false;
+            rb.velocity = Vector3.zero;
+        }
     }
 
     private void OnDrawGizmos()
@@ -98,7 +105,7 @@ public class PlayrtMovement : MonoBehaviour
             {
                 // 使用Rigidbody2D来平滑地移动角色
                 float targetSpeed = (runValue * speed) * 0.8f;
-                float smoothedSpeed = Mathf.Lerp(rb.velocity.x, targetSpeed, Time.deltaTime * smoothSpeed);
+                float smoothedSpeed = Mathf.Lerp(rb.velocity.x, targetSpeed, smoothSpeed);
                 rb.velocity = new Vector2(smoothedSpeed, rb.velocity.y);
             }
             Flip(runValue);
@@ -153,6 +160,7 @@ public class PlayrtMovement : MonoBehaviour
             playerAnimator.SetBool("isWalk", false);
             playerAnimator.SetBool("jump", false);
             playerAnimator.SetBool("isFalling", true);
+            firstTouchdownAfterJumping = true;
         }
 
         // 更新wasGrounded变量，为下一帧做准备
