@@ -60,10 +60,10 @@ public class Spikes : MonoBehaviour
     {
         audioSource.Play();
 
-        // 等待音频播放完成
-        yield return new WaitForSeconds(audioSource.clip.length);
-
         // 音频播放完毕后，执行死亡方法
         playerMovement.Die();
+
+        // 等待音频播放完成
+        yield return new WaitForSeconds(audioSource.clip.length);
     }
 }

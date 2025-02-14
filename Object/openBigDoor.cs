@@ -14,7 +14,6 @@ public class openBigDoor : MonoBehaviour
         if (!isBigDoorOpen)
         {
             isBigDoorOpen = InputManager.GetInstance().ObjectInteraction;
-            Debug.Log("isBigDoorOpen: " + isBigDoorOpen);
         }
     }
 

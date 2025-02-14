@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class StartPanel : MonoBehaviour
 {
@@ -12,12 +13,17 @@ public class StartPanel : MonoBehaviour
     [SerializeField] private GameObject aboutButton;
     [SerializeField] private GameObject ExitGameButton;
 
+    [Header("第一个选择的选项")]
+    [SerializeField] private GameObject menuFisrt;
+
     private void Start()
     {
         if (startPanel == null)
         {
             startPanel = this.gameObject;
         }
+
+        EventSystem.current.SetSelectedGameObject(menuFisrt);
     }
 
     /// <summary>

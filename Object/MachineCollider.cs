@@ -35,7 +35,7 @@ public class MachineCollider : MonoBehaviour
         if (!pressEKey)
         {
             pressEKey = InputManager.GetInstance().TextInteraction;
-            Debug.Log("isOneDoorOpen: " + pressEKey);
+            //Debug.Log("isOneDoorOpen: " + pressEKey);
         }
     }
 

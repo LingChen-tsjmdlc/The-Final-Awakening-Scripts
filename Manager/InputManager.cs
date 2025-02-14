@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using Debug = UnityEngine.Debug;
@@ -20,6 +21,8 @@ public class InputManager : MonoBehaviour
     public InputActionReference escAction;
     public InputActionReference backButtonAction;
     public InputActionReference restartGameAction;
+    public InputActionReference changeValueAddAction;
+    public InputActionReference changeValueReduceAction;
 
     public bool IsJump {  get; private set; }
     public Vector2 Move {  get; private set; }
@@ -31,6 +34,8 @@ public class InputManager : MonoBehaviour
     public bool Esc {  get; private set; }
     public bool BackButton {  get; private set; }
     public bool RestartGame {  get; private set; }
+    public float ChangeValueAdd {  get; private set; }
+    public float ChangeValueReduce { get; private set; }
 
 
 
@@ -63,10 +68,18 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        IsUsingController = IsControllerConnected();
+    }
+
     private void Update()
     {
         // 检测玩家是否正在使用控制器
-        IsUsingController = IsControllerConnected();
+        if(PlayerPrefs.GetInt("NowInputControlIndex") == 0)
+        {
+            IsUsingController = IsControllerConnected();
+        }
 
         IsJump = jumpAction.action.WasPressedThisFrame();
         Move = moveAction.action.ReadValue<Vector2>();
@@ -78,15 +91,23 @@ public class InputManager : MonoBehaviour
         Esc = escAction.action.WasPressedThisFrame();
         BackButton = backButtonAction.action.WasPressedThisFrame();
         RestartGame = restartGameAction.action.WasPressedThisFrame();
+        ChangeValueAdd = changeValueAddAction.action.ReadValue<float>();
+        ChangeValueReduce = changeValueReduceAction.action.ReadValue<float>();
+
+        // 如果玩家在设置中使用键盘鼠标
+        //if (PlayerPrefs.GetInt("NowInputControlIndex") == 1)
+        //{
+        //    ValueToDefault();
+        //}
     }
 
     private void LateUpdate()
     {
         IsJump = false;
-        Move = new Vector2(0,0);
+        Move = Vector2.zero;
         ShootLeftBlue = false;
         ShootRightRed = false;
-        ShootAngle = new Vector2(0,0);
+        ShootAngle = Vector2.zero;
     }
 
     private bool IsControllerConnected()
@@ -104,5 +125,24 @@ public class InputManager : MonoBehaviour
         }
         // 如果没有找到控制器设备，则返回 false
         return false;
+    }
+
+    /// <summary>
+    /// 所有值恢复默认
+    /// </summary>
+    private void ValueToDefault()
+    {
+        IsJump = false;
+        Move = Vector2.zero;
+        ObjectInteraction = false;
+        TextInteraction = false;
+        ShootLeftBlue = false;
+        ShootRightRed = false;
+        ShootAngle = Vector2.zero;
+        Esc = false;
+        BackButton = false;
+        RestartGame = false;
+        ChangeValueAdd = 0;
+        ChangeValueReduce = 0;
     }
 }

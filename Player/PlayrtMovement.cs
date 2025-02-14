@@ -176,7 +176,8 @@ public class PlayrtMovement : MonoBehaviour
         FxAudioManager.GetInstance().PlaySound(FxAudioManager.GetInstance().playerDie);   // ≤•∑≈“Ù–ß
         playerAnimator.SetBool("die", true);
         rb.bodyType = RigidbodyType2D.Static;
-        Invoke(nameof(DiedAndRestart), 0.5f);
+        rb.velocity = Vector3.zero;
+        Invoke(nameof(DiedAndRestart), 0.1f);
     }
 
     public void DiedAndRestart()

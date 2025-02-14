@@ -11,7 +11,13 @@ public class ReviewTextOpen : MonoBehaviour
 
     private bool isOpen;
 
-
+    private void Update()
+    {
+        if (!isOpen)
+        {
+            isOpen = InputManager.GetInstance().TextInteraction;
+        }
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
